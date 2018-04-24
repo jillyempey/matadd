@@ -3,5 +3,7 @@
 Starter code for Matrix Addition Pipelining lab
 
 Please add your names and GitHub account names here.
+Jillian Empey
+@jillyempey
 
 :octocat:
