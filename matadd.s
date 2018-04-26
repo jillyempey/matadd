@@ -65,6 +65,7 @@ rows:
 cont1:
    // calculate offset
    mov   r12, r5   // counter of rows in r12
+   mov   r11, r6
    lsl   r12,  #2 //multiply by 4 to get offset
    lsl   r11, #2 //col offset in r11
    add   r12, r12, r11 //total offset in r12
