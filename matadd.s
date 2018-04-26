@@ -28,8 +28,9 @@
 	.syntax unified
 	.arm
 matadd:
-   push  {r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
-   push  {r1}
+   push  {r4, lr}
+   ldr   r4, [sp, #8] //width in r4
+   push  {r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12}
 /**
    R0: base addr of C
    R1: base addr of A
@@ -44,9 +45,8 @@ matadd:
    R10: address of C[r][c]
    R11: temp
    R12: offset
-   R13:
+   
 **/
-   ldr   r4, [sp, #52]  // width in r4
    mov   r5, #0 // initial row = 0
    mov   r6, #0 // intial col = 0
 
@@ -85,5 +85,5 @@ cont1:
 
 done:
 
-   pop   {r1}
-   pop   {r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, pc}
+   pop   {r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12}
+   pop   {r4, pc}
