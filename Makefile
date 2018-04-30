@@ -1,6 +1,6 @@
-CXX = g++
+CXX = gcc
 CFLAGS = -O1 -Wall -g
-SRCS = matadd.s matadd-driver.o
+SRCS = matadd.s matadd-driver2.s
 BIN = matadd
 
 all:

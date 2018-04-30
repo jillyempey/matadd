@@ -30,7 +30,7 @@
 matadd:
    push  {r4, lr}
    ldr   r4, [sp, #8] //width in r4
-   push  {r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12}
+   push  {r5, r6, r7, r8, r9, r10, r11, r12}
 /**
    R0: base addr of C
    R1: base addr of A
@@ -44,9 +44,9 @@ matadd:
    R9: B[r][c]
    R10: address of C[r][c]
    R11: temp
-   R12: offset
-   
+   R12: offset 
 **/
+
    mov   r5, #0 // initial row = 0
    mov   r6, #0 // intial col = 0
 
@@ -64,9 +64,9 @@ rows:
 
 cont1:
    // calculate offset
-   mov   r12, r5   // counter of rows in r12
+   mov   r12, r5 // counter of rows in r12
    mov   r11, r6
-   lsl   r12,  #2 //multiply by 4 to get offset
+   lsl   r12, #2 //multiply by 4 to get offset
    lsl   r11, #2 //col offset in r11
    add   r12, r12, r11 //total offset in r12
    // calculate address of A[r][c] and B[r][c] and C[r][c]
@@ -86,5 +86,5 @@ cont1:
 
 done:
 
-   pop   {r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12}
+   pop   {r5, r6, r7, r8, r9, r10, r11, r12}
    pop   {r4, pc}
