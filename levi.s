@@ -38,8 +38,8 @@ iloop:
     beq return
     mov r5, #0
 jloop:
-    ldr r6, [sp, #24]
-    mul r7, r6, r8
+    ldr r6, [sp, #24] //width in r6
+    mul r7, r6, r8 //width*4
     cmp r7, r5 // Compare j with width
     beq iloop
 

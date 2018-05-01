@@ -28,9 +28,8 @@
 	.syntax unified
 	.arm
 matadd:
-   push  {r4, lr}
-   ldr   r4, [sp, #8] //width in r4
-   push  {r5, r6, r7, r8, r9, r10, r11, r12}
+   push  {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+   ldr   r4, [sp, #44]
 /**
    R0: base addr of C
    R1: base addr of A
@@ -50,6 +49,8 @@ matadd:
    mov   r5, #0 // initial row = 0
    mov   r6, #0 // intial col = 0
 
+   mov   r12, #0 //offset initialized to 0
+
 // if at the end of a row, go to next row
 rows:
    // is col < width
@@ -63,28 +64,25 @@ rows:
    beq   done
 
 cont1:
-   // calculate offset
-   mov   r12, r5 // counter of rows in r12
-   mov   r11, r6
-   lsl   r12, #2 //multiply by 4 to get offset
-   lsl   r11, #2 //col offset in r11
-   add   r12, r12, r11 //total offset in r12
+   // calculate offset : r12 = 4(r(r5) * width(r4) + c(r6))
+   mul   r12, r5, r4
+   add   r12, r12, r6
+   lsl   r12, #2
    // calculate address of A[r][c] and B[r][c] and C[r][c]
-   add   r8, r1, r12
-   add   r9, r2, r12
+   add   r8, r1, r12 //A[r][c] in r8
+   add   r9, r2, r12 // B[r][c] in r9
    add   r10, r0, r12
    // get value of A[r][c], B[r][c]
-   ldr   r8, [r8, #0]
-   ldr   r9, [r9, #0]
+   ldr   r8, [r8]
+   ldr   r9, [r8]
    // compute sum
    add   r7, r8, r9
    // store value into C[r][c]
-   str   r7, [r10, #0]
+   str   r7, [r0, r12]
    //increment col
    add   r6, r6, #1
    b  rows
 
 done:
 
-   pop   {r5, r6, r7, r8, r9, r10, r11, r12}
-   pop   {r4, pc}
+   pop   {r4, r5, r6, r7, r8, r9, pc}
