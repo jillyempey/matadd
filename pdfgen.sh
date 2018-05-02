@@ -57,24 +57,21 @@ echo >> "report$UR"
 echo "
 Unroll: $UR" >> finalreport
 cat report$UR >> finalreport
-#IFS=$'\n' read -d '' -r -a lines < report$UR
-#IFS=$' \t' read -r -a cycles <<< ${lines[1]}
-#IFS=$' \t' read -r -a instr <<< ${lines[2]}
 
-#rm finalreport$UR
-#echo    "                         -O0            -O1            -O2            -O3" >> "finalreport$UR"
-#echo  "Average CPI"
-#A=${cycles[1]}
-#B=${instr[1]}
-#echo $A
-#echo $B
-#awk -v x=$A -v y=$B '{printf "%d, %d, %.5f", x,y,y}'
-#echo $TEMP
 echo ####
 done
 gcc -O1 -pg  matadd.s matadd-driver.o
 perf stat --output rec ./a.out &> myout
-echo     ~~~~~~~~~~~~~~~~~~~
 gprof ./matadd|less >> gprep
 sed -n '3,8p' gprep >> finalreport
 
+echo     ~~~~~~~~DONE~~~~~~~~~~~
+for UR in 1 2 4 8
+do
+   for flag in O0 O1 O2 O3
+   do
+      rm rec$flag
+      rm rec2$flag
+   done
+   rm report$UR
+done
