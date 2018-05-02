@@ -1,5 +1,6 @@
 Lab 4 Report
 Jillian Empey and Levi Thompson
+
 Unroll: 0
                          -O0            -O1            -O2            -O3
 cycles:           1366143794     1365659391     1371795623     1372326810
