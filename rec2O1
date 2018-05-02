@@ -1,0 +1,16 @@
+# started on Wed May  2 06:53:46 2018
+
+
+ Performance counter stats for './matadd':
+
+       1251.398387      task-clock:u (msec)       #    0.700 CPUs utilized          
+                 0      context-switches:u        #    0.000 K/sec                  
+                 0      cpu-migrations:u          #    0.000 K/sec                  
+             3150      page-faults:u             #    0.003 M/sec                  
+     1369611399      cycles:u                  #    1.094 GHz                    
+     1048698946      instructions:u            #    0.77  insn per cycle         
+        90512021      branches:u                #   72.329 M/sec                  
+         6688908      branch-misses:u           #    7.39% of all branches        
+
+       1.787739313 seconds time elapsed
+

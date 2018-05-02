@@ -28,61 +28,51 @@
 	.syntax unified
 	.arm
 matadd:
-   push  {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
-   ldr   r4, [sp, #44]
-/**
-   R0: base addr of C
-   R1: base addr of A
-   R2: base addr of B
-   R3: height
-   R4: width
-   R5: row counter
-   R6: column counter
-   R7: sum
-   R8: A[r][c]
-   R9: B[r][c]
-   R10: address of C[r][c]
-   R11: temp
-   R12: offset 
-**/
-
-   mov   r5, #0 // initial row = 0
-   mov   r6, #0 // intial col = 0
-
-   mov   r12, #0 //offset initialized to 0
-
-// if at the end of a row, go to next row
+   push  {r4, r5, r6, r7, r8, lr}
+   /*
+      R0: C[0][0]
+      R1: A[0][0]
+      R2: B[0][0]
+      R3: height
+      R4: r
+      R5: c
+      R6: width/temp
+      R7: temp
+      R8: width*4
+   */
+   //set r to -4 so it will start row loop at 0
+   //set r8 to 4 to multiply things by 4 later on
+   mov r4, #-4
+   //mov r8, #4
+   ldr   r8, [sp, #24] //width in r8
+   mov   r8, r8, lsl #2  //width *4 in r8
 rows:
-   // is col < width
-   cmp   r6, r4     
-   blt   cont1
-   //increment row and set col = 0
-   mov   r6, #0    
-   add   r5, r5, #1
-   //if row == height, we're done
-   cmp   r3, r5
+   // increment row
+   add   r4, r4, #4
+   // put 4*height in r7
+   mov   r7, r3, lsl #2
+   // if 4*height == row we're done
+   cmp   r7, r4    
    beq   done
-
-cont1:
-   // calculate offset : r12 = 4(r(r5) * width(r4) + c(r6))
-   mul   r12, r5, r4
-   add   r12, r12, r6
-   lsl   r12, #2
-   // calculate address of A[r][c] and B[r][c] and C[r][c]
-   add   r8, r1, r12 //A[r][c] in r8
-   add   r9, r2, r12 // B[r][c] in r9
-   add   r10, r0, r12
-   // get value of A[r][c], B[r][c]
-   ldr   r8, [r8]
-   ldr   r9, [r8]
+   //else set col to 0 to start on current row
+   mov   r5, #0
+cols:
+   // if 4*width == col then we've finished a row
+   cmp   r8, r5
+   beq rows
+  //  get value of A[r][c], B[r][c]
+   ldr   r6, [r1, r4] //A[r]
+   ldr   r6, [r6, r5] //A[r][c]
+   ldr   r7, [r2, r4] //B[r]
+   ldr   r7, [r7, r5] //B[r][c]
    // compute sum
-   add   r7, r8, r9
+   add   r6, r6, r7
+   //load addr of C[r]
+   ldr   r7, [r0, r4]
    // store value into C[r][c]
-   str   r7, [r0, r12]
+   str   r6, [r7, r5]
    //increment col
-   add   r6, r6, #1
-   b  rows
-
+   add   r5, r5, #4
+   b  cols
 done:
-
-   pop   {r4, r5, r6, r7, r8, r9, pc}
+   pop   {r4, r5, r6, r7, r8, pc}

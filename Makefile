@@ -1,6 +1,6 @@
 CXX = gcc
 CFLAGS = -O3  -Wall -g
-SRCS = 2matadd.s matadd-driver.o
+SRCS = matadd8.s matadd-driver.o
 BIN = matadd
 
 all:
